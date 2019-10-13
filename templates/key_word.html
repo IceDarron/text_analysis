@@ -2,44 +2,42 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8">
-    <title>测试页面</title>
+    <title>关键词页面</title>
     <!-- 引入 ECharts 文件 -->
     {#    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts-all-3.js"></script>#}
-    <script src="../static/echarts.min.js"></script>
-    <script src="../static/jquery-3.4.1.min.js"></script>
+    <script src="/static/echarts.min.js"></script>
+    <script src="/static/jquery-3.4.1.min.js"></script>
 </head>
 <body>
-<div>{{ name }}</div>
-
 <!-- 为 ECharts 准备一个具备大小（宽高）的 DOM -->
-<div id="main" style="width: 600px;height:400px;"></div>
+<div id="main" style="width: 1440px;height:300px;"></div>
 <script type="text/javascript">
     $(function () {
         // 基于准备好的dom，初始化echarts实例
         const myChart = echarts.init(document.getElementById('main'));
         $.ajax({
-            url: '/get_data',
+            url: '/freq_key_word',
             success: function (data) {
                 const json_data = JSON.parse(data);
 
-                console.info(json_data['language'])
+                console.info(json_data['key_word'])
                 console.info(json_data['value'])
 
                 // 指定图表的配置项和数据
-                var option = {
+                const option = {
                     title: {
-                        text: '学习语言人数统计'
+                        text: '文献分析'
                     },
                     tooltip: {},
                     legend: {
-                        data: ['销量']
+                        data: ['关键词']
                     },
                     xAxis: {
-                        data: json_data['language']
+                        data: json_data['key_word']
                     },
                     yAxis: {},
                     series: [{
-                        name: '销量',
+                        name: '出现次数',
                         type: 'bar',
                         data: json_data['value']
                     }]

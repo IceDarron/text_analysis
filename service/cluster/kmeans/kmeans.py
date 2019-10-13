@@ -1,5 +1,6 @@
-from numpy import *
+# encoding=utf-8
 import matplotlib.pyplot as plt
+from numpy import *
 
 
 # calculate Euclidean distance
