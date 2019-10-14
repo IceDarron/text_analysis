@@ -27,8 +27,13 @@ def extract_data():
     # 2.提取结果
     for i in range(len(literature_list)):
         print(literature_list[i])
+    return literature_list
 
-    # 3.计算关键词出现次数
+
+def calc_key_word_count():
+    # 获取提取结果
+    literature_list = extract_data()
+    # 计算关键词出现次数
     key_word_count = {}
     for i in range(len(literature_list)):
         literature = literature_list[i]
@@ -39,9 +44,19 @@ def extract_data():
             except KeyError:
                 key_word_count[key_word[j]] = 1
     print(key_word_count)
-    # 排序
-    # TODO
     return key_word_count
+
+
+def calc_key_word_freq():
+    # 获取关键字出现次数结果
+    key_word_count = calc_key_word_count()
+    # 计算关键字频率
+    key_word_freq = {}
+    count = len(extract_data())
+    for k in key_word_count.keys():
+        key_word_freq[k] = round(key_word_count[k] / count * 100, 2)
+    print(key_word_freq)
+    return key_word_freq
 
 
 def get_literature_model(content_dict, content):
@@ -72,4 +87,5 @@ def get_value(key, origin_value):
 
 
 if __name__ == '__main__':
-    extract_data()
+    calc_key_word_freq()
+    print(10 / 685)

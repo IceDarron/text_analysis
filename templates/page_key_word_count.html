@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <title>关键词出现次数页面</title>
+    <!-- 引入 ECharts 文件 -->
+    {#    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts-all-3.js"></script>#}
+    <script src="/static/echarts.min.js"></script>
+    <script src="/static/jquery-3.4.1.min.js"></script>
+</head>
+<body>
+<!-- 为 ECharts 准备一个具备大小（宽高）的 DOM -->
+<div id="main" style="width: 1440px;height:900px;"></div>
+<script type="text/javascript">
+
+    $(function () {
+        const myChart = echarts.init(document.getElementById('main'));
+        $.ajax({
+            url: '/key_word_count',
+            success: function (data) {
+                let json_data = JSON.parse(data);
+
+                let legendData = [];
+                let seriesData = [];
+                let selected = {};
+
+                let key_words = json_data['key_word']
+                let values = json_data['value']
+                for (let i = 0; i < key_words.length; i++) {
+                    legendData.push(key_words[i]);
+                    seriesData.push({
+                        name: key_words[i],
+                        value: values[i]
+                    });
+                    selected[name] = i < 6;
+                }
+
+                data = {
+                    legendData: legendData,
+                    seriesData: seriesData,
+                    selected: selected
+                };
+
+                // 指定图表的配置项和数据
+                const option = {
+                    title: {
+                        text: '关键字统计',
+                        subtext: '显示关键词次数及关键词之间的比例关系',
+                        x: 'center'
+                    },
+                    tooltip: {
+                        trigger: 'item',
+                        formatter: "{a} <br/>{b} : {c} ({d}%)"
+                    },
+                    legend: {
+                        type: 'scroll',
+                        orient: 'vertical',
+                        right: 10,
+                        top: 20,
+                        bottom: 20,
+                        data: data.legendData,
+
+                        selected: data.selected
+                    },
+                    series: [
+                        {
+                            name: '姓名',
+                            type: 'pie',
+                            radius: '55%',
+                            center: ['40%', '50%'],
+                            data: data.seriesData,
+                            itemStyle: {
+                                emphasis: {
+                                    shadowBlur: 10,
+                                    shadowOffsetX: 0,
+                                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                }
+                            }
+                        }
+                    ]
+                };
+                // 使用刚指定的配置项和数据显示图表。
+                myChart.setOption(option);
+            }
+        })
+    })
+</script>
+</body>
+</html>
