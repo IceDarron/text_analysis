@@ -3,8 +3,52 @@
 <head>
     <meta charset="utf-8">
     <title>测试页面</title>
+    <!-- 引入 ECharts 文件 -->
+    {#    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts-all-3.js"></script>#}
+    <script src="../static/echarts.min.js"></script>
+    <script src="../static/jquery-3.4.1.min.js"></script>
 </head>
 <body>
-{{ name }}
+<div>{{ name }}</div>
+
+<!-- 为 ECharts 准备一个具备大小（宽高）的 DOM -->
+<div id="main" style="width: 600px;height:400px;"></div>
+<script type="text/javascript">
+    $(function () {
+        // 基于准备好的dom，初始化echarts实例
+        const myChart = echarts.init(document.getElementById('main'));
+        $.ajax({
+            url: '/get_data',
+            success: function (data) {
+                const json_data = JSON.parse(data);
+
+                console.info(json_data['language'])
+                console.info(json_data['value'])
+
+                // 指定图表的配置项和数据
+                var option = {
+                    title: {
+                        text: '学习语言人数统计'
+                    },
+                    tooltip: {},
+                    legend: {
+                        data: ['销量']
+                    },
+                    xAxis: {
+                        data: json_data['language']
+                    },
+                    yAxis: {},
+                    series: [{
+                        name: '销量',
+                        type: 'bar',
+                        data: json_data['value']
+                    }]
+                };
+                // 使用刚指定的配置项和数据显示图表。
+                myChart.setOption(option);
+            }
+        })
+    })
+</script>
 </body>
 </html>

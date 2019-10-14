@@ -20,3 +20,12 @@ text_analysis
 -- app.py 路由
 -- run.py 启动脚本
 ```
+
+
+### 启动
+run.py 启动脚本
+
+
+### 接口
+关键词页面：
+http://127.0.0.1:5000/key_word/

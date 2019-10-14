@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <title>关键词频率页面</title>
+    <!-- 引入 ECharts 文件 -->
+    {#    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts-all-3.js"></script>#}
+    <script src="/static/echarts.min.js"></script>
+    <script src="/static/jquery-3.4.1.min.js"></script>
+</head>
+<body>
+<!-- 为 ECharts 准备一个具备大小（宽高）的 DOM -->
+<div id="main" style="width: 1440px;height:900px;"></div>
+<script type="text/javascript">
+
+    $(function () {
+        const myChart = echarts.init(document.getElementById('main'));
+        $.ajax({
+            url: '/key_word_freq',
+            success: function (data) {
+                let json_data = JSON.parse(data);
+
+                let source = new Array();
+                source.push(['score', 'amount', 'product']);
+
+                let key_words = json_data['key_word'];
+                let values = json_data['value'];
+                for (let i = 0; i < key_words.length; i++) {
+                    let array = new Array();
+                    array[0] = values[i];
+                    array[1] = 685 * values[i] * 0.01
+                    array[2] = key_words[i];
+                    source.push(array);
+                }
+
+                const option = {
+                    dataset: {
+                        source: source
+                    },
+                    grid: {containLabel: true},
+                    xAxis: {name: '出现次数'},
+                    yAxis: {type: 'category'},
+                    visualMap: {
+                        orient: 'horizontal',
+                        left: 'center',
+                        min: 0,
+                        max: 100,
+                        text: ['100%-出现频率', '0%'],
+                        // Map the score column to color
+                        dimension: 0,
+                        inRange: {
+                            color: ['#D7DA8B', '#E15457']
+                        }
+                    },
+                    series: [
+                        {
+                            type: 'bar',
+                            encode: {
+                                // Map the "amount" column to X axis.
+                                x: 'amount',
+                                // Map the "product" column to Y axis
+                                y: 'product'
+                            }
+                        }
+                    ]
+                };
+
+                // 使用刚指定的配置项和数据显示图表。
+                myChart.setOption(option);
+            }
+        })
+    })
+</script>
+</body>
+</html>
