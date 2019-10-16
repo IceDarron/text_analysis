@@ -87,5 +87,5 @@ def get_value(key, origin_value):
 
 
 if __name__ == '__main__':
+    calc_key_word_count()
     calc_key_word_freq()
-    print(10 / 685)
